@@ -3,21 +3,22 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
 public class SistemaLogin {
     Scanner leia = new Scanner(System.in);
+    JFrame tela = new JFrame("Sistema Login");
+    JPanel panel = new JPanel();
+    JLabel lblUsuario = new JLabel("Login: ");
+    JTextField txfUsuario = new JTextField(20);
+    JLabel lblSenha = new JLabel("Senha: ");
+    JPasswordField psfSenha = new JPasswordField(20);
+    JButton cadastrar = new JButton("Cadastrar");
+    JButton logar = new JButton("Logar!");
 
     public SistemaLogin(){
-        JFrame tela = new JFrame("Sistema Login");
-        JPanel panel = new JPanel();
-        JLabel lblUsuario = new JLabel("Login: ");
-        JTextField txfUsuario = new JTextField(20);
-        JLabel lblSenha = new JLabel("Senha: ");
-        JPasswordField psfSenha = new JPasswordField(20);
-        JButton cadastrar = new JButton("Cadastrar");
-        JButton logar = new JButton("Logar!");
 
         tela.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         tela.setSize(250,100);
@@ -34,7 +35,11 @@ public class SistemaLogin {
         cadastrar.addActionListener(actionEvent -> {
             String nome = txfUsuario.getText();
             String senha = String.valueOf(psfSenha.getPassword());
-            cadastro(nome,senha);
+            if(!cadastro(nome,senha)){
+                JOptionPane.showMessageDialog(tela, "Erro! Cadastro não realizado!");
+            }else{
+                JOptionPane.showMessageDialog(tela,"Cadastro realizado com sucesso!");
+            }
         });
 
         logar.addActionListener(actionEvent -> {
@@ -51,12 +56,21 @@ public class SistemaLogin {
         tela.setVisible(true);
     }
 
-    void cadastro(String nome, String senha){
+    boolean cadastro(String nome, String senha){
         try {
-            PrintStream escrever = new PrintStream("logins.txt");
+            PrintStream escrever = new PrintStream(new FileOutputStream("logins.txt",true));
+            Scanner txtNoScanner = new Scanner(new FileInputStream("logins.txt"));
+            while(txtNoScanner.hasNextLine()){
+                String login = txtNoScanner.next();
+                if(login.equals(nome)){
+                    return false;
+                }
+            }
+            escrever.println();
             escrever.print(nome + " " + senha);
+            return true;
         }catch(FileNotFoundException e){
-            System.out.println("Erro, Arquivo nao encontrado!");
+            return false;
         }
     }
 
@@ -64,21 +78,20 @@ public class SistemaLogin {
         try {
 
             String tentativaLogin = nome + " " + senha;
-            Scanner ler = new Scanner(new FileInputStream("logins.txt"));
+            Scanner txtNoScanner = new Scanner(new FileInputStream("logins.txt"));
 
-            if (ler.hasNextLine()) {
-                String loginRegistrado = ler.nextLine();
+            while(txtNoScanner.hasNextLine()) {
+                String loginRegistrado = txtNoScanner.nextLine();
                 if (loginRegistrado.equals(tentativaLogin)) {
-                    ler.close();
+                    txtNoScanner.close();
                     return true;
                 }
             }
             return false;
 
         } catch (FileNotFoundException e) {
-            System.out.println("Arquivo não encontrado.");
+            return false;
         }
-        return false;
     }
 
 
