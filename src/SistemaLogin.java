@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Scanner;
@@ -36,6 +37,16 @@ public class SistemaLogin {
             cadastro(nome,senha);
         });
 
+        logar.addActionListener(actionEvent -> {
+            String nome = txfUsuario.getText();
+            String senha = String.valueOf(psfSenha.getPassword());
+            if(!logando(nome, senha)){
+                JOptionPane.showMessageDialog(tela,"Login ou Senha Incorretos");
+            }else{
+                JOptionPane.showMessageDialog(tela,"Login realizado com sucesso!");
+            }
+        });
+
         tela.add(panel,BorderLayout.CENTER);
         tela.setVisible(true);
     }
@@ -48,6 +59,28 @@ public class SistemaLogin {
             System.out.println("Erro, Arquivo nao encontrado!");
         }
     }
+
+    boolean logando(String nome, String senha) {
+        try {
+
+            String tentativaLogin = nome + " " + senha;
+            Scanner ler = new Scanner(new FileInputStream("logins.txt"));
+
+            if (ler.hasNextLine()) {
+                String loginRegistrado = ler.nextLine();
+                if (loginRegistrado.equals(tentativaLogin)) {
+                    ler.close();
+                    return true;
+                }
+            }
+            return false;
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo não encontrado.");
+        }
+        return false;
+    }
+
 
     public static void main(String[] args) {
         new SistemaLogin();
