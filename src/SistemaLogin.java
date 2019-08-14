@@ -20,6 +20,7 @@ public class SistemaLogin {
 
     public SistemaLogin(){
 
+        tela.setLocationRelativeTo(null);
         tela.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         tela.setSize(250,100);
         tela.setResizable(false);
@@ -58,17 +59,21 @@ public class SistemaLogin {
 
     boolean cadastro(String nome, String senha){
         try {
-            PrintStream escrever = new PrintStream(new FileOutputStream("logins.txt",true));
-            Scanner txtNoScanner = new Scanner(new FileInputStream("logins.txt"));
-            while(txtNoScanner.hasNextLine()){
-                String login = txtNoScanner.next();
-                if(login.equals(nome)){
-                    return false;
+            if (nome.matches("([a-zA-Z0-9._-]{3,})") && senha.matches("([a-zA-Z0-9._-]{3,})")) {
+                PrintStream escrever = new PrintStream(new FileOutputStream("logins.txt", true));
+                Scanner txtNoScanner = new Scanner(new FileInputStream("logins.txt"));
+                while (txtNoScanner.hasNextLine()) {
+                    String login = txtNoScanner.next();
+                    if (login.equals(nome)) {
+                        return false;
+                    }
                 }
+                escrever.println();
+                escrever.print(nome + " " + senha);
+                return true;
+            } else {
+                return false;
             }
-            escrever.println();
-            escrever.print(nome + " " + senha);
-            return true;
         }catch(FileNotFoundException e){
             return false;
         }
