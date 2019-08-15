@@ -22,7 +22,8 @@ public class SistemaLogin {
 
         tela.setLocationRelativeTo(null);
         tela.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        tela.setSize(250,100);
+        tela.setSize(250,100); //Original
+        //tela.setSize(800,600);
         tela.setResizable(false);
 
         panel.setLayout(new GridLayout(3,1));
@@ -36,11 +37,7 @@ public class SistemaLogin {
         cadastrar.addActionListener(actionEvent -> {
             String nome = txfUsuario.getText();
             String senha = String.valueOf(psfSenha.getPassword());
-            if(!cadastro(nome,senha)){
-                JOptionPane.showMessageDialog(tela, "Erro! Cadastro não realizado!");
-            }else{
-                JOptionPane.showMessageDialog(tela,"Cadastro realizado com sucesso!");
-            }
+            cadastro(nome,senha);
         });
 
         logar.addActionListener(actionEvent -> {
@@ -57,34 +54,42 @@ public class SistemaLogin {
         tela.setVisible(true);
     }
 
-    boolean cadastro(String nome, String senha){
+    void cadastro(String nome, String senha){
+        String login = "";
         try {
+            if(nome.isBlank() || senha.isBlank()){
+                throw new IllegalArgumentException("Erro! não é possível deixar login ou senha em branco!");
+            }
             if (nome.matches("([a-zA-Z0-9._-]{3,})") && senha.matches("([a-zA-Z0-9._-]{3,})")) {
                 PrintStream escrever = new PrintStream(new FileOutputStream("logins.txt", true));
                 Scanner txtNoScanner = new Scanner(new FileInputStream("logins.txt"));
                 while (txtNoScanner.hasNextLine()) {
-                    String login = txtNoScanner.next();
+                    login = txtNoScanner.next();
                     if (login.equals(nome)) {
-                        return false;
+                        throw new IllegalArgumentException("Erro! esse usuário já foi cadastrado!");
                     }
                 }
-                escrever.println();
-                escrever.print(nome + " " + senha);
-                return true;
+                if(login.isBlank()){
+                    escrever.print(nome + " " + senha);
+                }else {
+                    escrever.println();
+                    escrever.print(nome + " " + senha);
+                }
+                JOptionPane.showMessageDialog(tela, "Sucesso! Login cadastrado com sucesso!");
             } else {
-                return false;
+                throw new IllegalArgumentException("Erro! Voce pode usar letras, números ou .-_ a partir de 3 digitos");
             }
         }catch(FileNotFoundException e){
-            return false;
+            JOptionPane.showMessageDialog(tela,e.getMessage());
+        }catch(IllegalArgumentException e){
+            JOptionPane.showMessageDialog(tela,e.getMessage());
         }
     }
 
     boolean logando(String nome, String senha) {
         try {
-
             String tentativaLogin = nome + " " + senha;
             Scanner txtNoScanner = new Scanner(new FileInputStream("logins.txt"));
-
             while(txtNoScanner.hasNextLine()) {
                 String loginRegistrado = txtNoScanner.nextLine();
                 if (loginRegistrado.equals(tentativaLogin)) {
