@@ -1,15 +1,16 @@
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
-import java.util.concurrent.Flow;
 
 public class SistemaLogin {
     Scanner leia = new Scanner(System.in);
     JFrame tela = new JFrame();
+    JPanel panelDoFrame = new JPanel();
     JPanel panel = new JPanel();
     JLabel lblBemVindo = new JLabel();
     JLabel lblLogin = new JLabel();
@@ -23,10 +24,15 @@ public class SistemaLogin {
 
         //Frame
         tela.setTitle("Sistema Login");
-        tela.setLocationRelativeTo(null);
         tela.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         tela.setSize(300,300);
-        tela.setResizable(true);
+        tela.setResizable(false);
+        tela.setLocationRelativeTo(null);
+
+        //Panel do Frame
+        panelDoFrame.setLayout(new GridBagLayout());
+        panelDoFrame.setPreferredSize(tela.getSize());
+        panelDoFrame.setBackground(Color.BLUE);
 
         //Fonte das Labels
         Font fonte = new Font("Georgia",Font.PLAIN,15);
@@ -38,8 +44,6 @@ public class SistemaLogin {
         lblLogin.setText("Login: ");
         lblLogin.setFont(fonte);
         lblLogin.setForeground(Color.BLUE);
-        lblLogin.setHorizontalTextPosition(SwingConstants.CENTER);
-
 
         //Label da Senha
         lblSenha.setText("Senha: ");
@@ -53,8 +57,6 @@ public class SistemaLogin {
 
         //Botão Cadastrar
         btnCadastrar.setText("Cadastrar");
-        System.out.println(btnCadastrar.getSize());
-        //btnCadastrar.setSize();
         btnCadastrar.addActionListener(actionEvent -> {
             String nome = txfLogin.getText();
             String senha = String.valueOf(psfSenha.getPassword());
@@ -83,10 +85,13 @@ public class SistemaLogin {
         panel.add(psfSenha);
         panel.add(btnCadastrar);
         panel.add(btnLogar);
+        panel.setPreferredSize(new Dimension(230,200));
+        panel.setBorder(new LineBorder(new Color(0,0,0),3,true));
 
-        tela.setContentPane(new JPanel());
-        tela.add(panel);
-        //tela.pack();
+        //Montagem dos Componentes
+        panelDoFrame.add(panel);
+        tela.add(panelDoFrame);
+        tela.pack();
         tela.setVisible(true);
     }
 
