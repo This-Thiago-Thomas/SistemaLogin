@@ -1,47 +1,70 @@
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
+import java.util.concurrent.Flow;
 
 public class SistemaLogin {
     Scanner leia = new Scanner(System.in);
-    JFrame tela = new JFrame("Sistema Login");
+    JFrame tela = new JFrame();
     JPanel panel = new JPanel();
-    JLabel lblUsuario = new JLabel("Login: ");
-    JTextField txfUsuario = new JTextField(20);
-    JLabel lblSenha = new JLabel("Senha: ");
-    JPasswordField psfSenha = new JPasswordField(20);
-    JButton cadastrar = new JButton("Cadastrar");
-    JButton logar = new JButton("Logar!");
+    JLabel lblBemVindo = new JLabel();
+    JLabel lblLogin = new JLabel();
+    JLabel lblSenha = new JLabel();
+    JTextField txfLogin = new JTextField();
+    JPasswordField psfSenha = new JPasswordField();
+    JButton btnCadastrar = new JButton();
+    JButton btnLogar = new JButton();
 
     public SistemaLogin(){
 
+        //Frame
+        tela.setTitle("Sistema Login");
         tela.setLocationRelativeTo(null);
         tela.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        tela.setSize(250,100); //Original
-        //tela.setSize(800,600);
-        tela.setResizable(false);
+        tela.setSize(300,300);
+        tela.setResizable(true);
 
-        panel.setLayout(new GridLayout(3,1));
-        panel.add(lblUsuario);
-        panel.add(txfUsuario);
-        panel.add(lblSenha);
-        panel.add(psfSenha);
-        panel.add(cadastrar);
-        panel.add(logar);
+        //Fonte das Labels
+        Font fonte = new Font("Georgia",Font.PLAIN,15);
 
-        cadastrar.addActionListener(actionEvent -> {
-            String nome = txfUsuario.getText();
+        //Label do Bem Vindo
+        lblBemVindo.setText("Sistema de Login!! :D");
+
+        //Label do Login
+        lblLogin.setText("Login: ");
+        lblLogin.setFont(fonte);
+        lblLogin.setForeground(Color.BLUE);
+        lblLogin.setHorizontalTextPosition(SwingConstants.CENTER);
+
+
+        //Label da Senha
+        lblSenha.setText("Senha: ");
+        lblSenha.setFont(fonte);
+        lblSenha.setForeground(Color.BLUE);
+
+        //Txf do Login
+        txfLogin.setColumns(10);
+        //Psf da Senha
+        psfSenha.setColumns(10);
+
+        //Botão Cadastrar
+        btnCadastrar.setText("Cadastrar");
+        System.out.println(btnCadastrar.getSize());
+        //btnCadastrar.setSize();
+        btnCadastrar.addActionListener(actionEvent -> {
+            String nome = txfLogin.getText();
             String senha = String.valueOf(psfSenha.getPassword());
             cadastro(nome,senha);
         });
 
-        logar.addActionListener(actionEvent -> {
-            String nome = txfUsuario.getText();
+        //Botão Logar
+        btnLogar.setText("Logar!");
+        btnLogar.addActionListener(actionEvent -> {
+            String nome = txfLogin.getText();
             String senha = String.valueOf(psfSenha.getPassword());
             if(!logando(nome, senha)){
                 JOptionPane.showMessageDialog(tela,"Login ou Senha Incorretos");
@@ -50,10 +73,24 @@ public class SistemaLogin {
             }
         });
 
-        tela.add(panel,BorderLayout.CENTER);
+        //Panel
+        panel.setBackground(Color.green);
+        panel.setLayout(new GridLayout(3,1));
+        //panel.add(lblBemVindo);
+        panel.add(lblLogin);
+        panel.add(txfLogin);
+        panel.add(lblSenha);
+        panel.add(psfSenha);
+        panel.add(btnCadastrar);
+        panel.add(btnLogar);
+
+        tela.setContentPane(new JPanel());
+        tela.add(panel);
+        //tela.pack();
         tela.setVisible(true);
     }
 
+    //Método do Cadastro
     void cadastro(String nome, String senha){
         String login = "";
         try {
@@ -86,6 +123,7 @@ public class SistemaLogin {
         }
     }
 
+    //Metodo do login
     boolean logando(String nome, String senha) {
         try {
             String tentativaLogin = nome + " " + senha;
@@ -103,7 +141,6 @@ public class SistemaLogin {
             return false;
         }
     }
-
 
     public static void main(String[] args) {
         new SistemaLogin();
