@@ -35,7 +35,7 @@ public class SistemaLogin {
         panelDoFrame.setBackground(Color.BLUE);
 
         //Fonte das Labels
-        Font fonte = new Font("Georgia",Font.PLAIN,15);
+        Font fonte = new Font("Georgia",Font.PLAIN,20);
 
         //Label do Bem Vindo
         lblBemVindo.setText("Sistema de Login!! :D");
@@ -44,19 +44,23 @@ public class SistemaLogin {
         lblLogin.setText("Login: ");
         lblLogin.setFont(fonte);
         lblLogin.setForeground(Color.BLUE);
+        lblLogin.setHorizontalAlignment(JLabel.CENTER);
 
         //Label da Senha
         lblSenha.setText("Senha: ");
         lblSenha.setFont(fonte);
         lblSenha.setForeground(Color.BLUE);
+        lblSenha.setHorizontalAlignment(JLabel.CENTER);
 
         //Txf do Login
         txfLogin.setColumns(10);
+
         //Psf da Senha
         psfSenha.setColumns(10);
 
         //Botão Cadastrar
         btnCadastrar.setText("Cadastrar");
+        btnLogar.setSize(30,30);
         btnCadastrar.addActionListener(actionEvent -> {
             String nome = txfLogin.getText();
             String senha = String.valueOf(psfSenha.getPassword());
@@ -65,6 +69,7 @@ public class SistemaLogin {
 
         //Botão Logar
         btnLogar.setText("Logar!");
+        btnLogar.setSize(30,30);
         btnLogar.addActionListener(actionEvent -> {
             String nome = txfLogin.getText();
             String senha = String.valueOf(psfSenha.getPassword());
@@ -75,23 +80,31 @@ public class SistemaLogin {
             }
         });
 
+        //Layout do panel
+        GridBagConstraints quebraLinha = new GridBagConstraints();
+        quebraLinha.gridwidth = GridBagConstraints.REMAINDER;
+        GridBagConstraints gridDoBotao = new GridBagConstraints();
+        gridDoBotao.gridx = 0;
+
+
         //Panel
         panel.setBackground(Color.green);
-        panel.setLayout(new GridLayout(3,1));
+        panel.setLayout(new GridBagLayout());
         //panel.add(lblBemVindo);
         panel.add(lblLogin);
-        panel.add(txfLogin);
+        panel.add(txfLogin,quebraLinha);
         panel.add(lblSenha);
-        panel.add(psfSenha);
-        panel.add(btnCadastrar);
-        panel.add(btnLogar);
+        panel.add(psfSenha,quebraLinha);
+        panel.add(btnCadastrar,gridDoBotao);
+        gridDoBotao.gridx = 1;
+        panel.add(btnLogar,gridDoBotao);
         panel.setPreferredSize(new Dimension(230,200));
         panel.setBorder(new LineBorder(new Color(0,0,0),3,true));
 
         //Montagem dos Componentes
         panelDoFrame.add(panel);
         tela.add(panelDoFrame);
-        tela.pack();
+        //tela.pack();
         tela.setVisible(true);
     }
 
