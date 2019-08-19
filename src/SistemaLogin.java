@@ -44,19 +44,19 @@ public class SistemaLogin {
         lblLogin.setText("Login: ");
         lblLogin.setFont(fonte);
         lblLogin.setForeground(Color.BLUE);
-        lblLogin.setHorizontalAlignment(JLabel.CENTER);
 
         //Label da Senha
         lblSenha.setText("Senha: ");
         lblSenha.setFont(fonte);
         lblSenha.setForeground(Color.BLUE);
-        lblSenha.setHorizontalAlignment(JLabel.CENTER);
 
         //Txf do Login
         txfLogin.setColumns(10);
+        txfLogin.setToolTipText("Campo para digitar o Login");
 
         //Psf da Senha
         psfSenha.setColumns(10);
+        psfSenha.setToolTipText("Campo para digitar a Senha");
 
         //Botão Cadastrar
         btnCadastrar.setText("Cadastrar");
@@ -80,26 +80,24 @@ public class SistemaLogin {
             }
         });
 
-        //Layout do panel
+        //Grids do GridBagLayout
         GridBagConstraints quebraLinha = new GridBagConstraints();
         quebraLinha.gridwidth = GridBagConstraints.REMAINDER;
-        GridBagConstraints gridDoBotao = new GridBagConstraints();
-        gridDoBotao.gridx = 0;
-
+        GridBagConstraints fillGrid = new GridBagConstraints();
+        fillGrid.fill = GridBagConstraints.HORIZONTAL;
 
         //Panel
         panel.setBackground(Color.green);
         panel.setLayout(new GridBagLayout());
         //panel.add(lblBemVindo);
-        panel.add(lblLogin);
+        panel.add(lblLogin,fillGrid);
         panel.add(txfLogin,quebraLinha);
-        panel.add(lblSenha);
+        panel.add(lblSenha,fillGrid);
         panel.add(psfSenha,quebraLinha);
-        panel.add(btnCadastrar,gridDoBotao);
-        gridDoBotao.gridx = 1;
-        panel.add(btnLogar,gridDoBotao);
+        panel.add(btnCadastrar,fillGrid);
+        panel.add(btnLogar,fillGrid);
         panel.setPreferredSize(new Dimension(230,200));
-        panel.setBorder(new LineBorder(new Color(0,0,0),3,true));
+        panel.setBorder(new LineBorder(new Color(0,0,0),3));
 
         //Montagem dos Componentes
         panelDoFrame.add(panel);
@@ -113,7 +111,7 @@ public class SistemaLogin {
         String login = "";
         try {
             if(nome.isBlank() || senha.isBlank()){
-                throw new IllegalArgumentException("Erro! não é possível deixar login ou senha em branco!");
+                throw new IllegalArgumentException("Erro! Não é possível deixar Login ou Senha em branco!");
             }
             if (nome.matches("([a-zA-Z0-9._-]{3,})") && senha.matches("([a-zA-Z0-9._-]{3,})")) {
                 PrintStream escrever = new PrintStream(new FileOutputStream("logins.txt", true));
@@ -121,7 +119,7 @@ public class SistemaLogin {
                 while (txtNoScanner.hasNextLine()) {
                     login = txtNoScanner.next();
                     if (login.equals(nome)) {
-                        throw new IllegalArgumentException("Erro! esse usuário já foi cadastrado!");
+                        throw new IllegalArgumentException("Erro! Esse usuário já foi cadastrado!");
                     }
                 }
                 if(login.isBlank()){
